@@ -25,7 +25,6 @@ return new class extends Migration
                 'scooter'
             ])->nullable();
             $table->decimal('base_price', 10, 2);
-            $table->string('image')->nullable();;
             $table->string('description')->nullable();
             $table->timestamps();
         });

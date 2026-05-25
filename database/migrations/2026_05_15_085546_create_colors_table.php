@@ -18,6 +18,7 @@ return new class extends Migration
             ->cascadeOnDelete();
             $table->string('name');
             $table->string('hex_code', 7);
+            $table->string('image')->nullable();
             $table->decimal('extra_price', 10, 2)->default(0);
             $table->timestamps();
         });

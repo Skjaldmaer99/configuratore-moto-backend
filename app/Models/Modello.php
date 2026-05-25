@@ -24,9 +24,10 @@ class Modello extends Model
 
     public function colors()
     {
-        return $this->belongsToMany(Color::class , 'model_colors',
+        /* return $this->belongsToMany(Color::class , 'model_colors',
             'model_id',
-            'color_id');
+            'color_id'); */
+        return $this->hasMany(Color::class, 'model_id');
     }
 
     public function optionals()

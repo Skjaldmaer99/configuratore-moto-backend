@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->enum('category', ['tech', ''])->nullable();
+            $table->enum('category', ['tech', 'style'])->nullable();
             $table->timestamps();
         });
     }

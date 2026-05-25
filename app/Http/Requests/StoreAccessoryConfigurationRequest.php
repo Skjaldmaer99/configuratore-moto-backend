@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreModelRequest extends FormRequest
+class StoreAccessoryConfigurationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,9 @@ class StoreModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brand' => ['required', 'string', 'max:100'],
-            'name' => ['required', 'string', 'max:100'],
-            'category' => ['required', 'in:naked,sport,adventure,touring,urban,scooter'],
-            'base_price' => ['required', 'numeric', 'min:0'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'description' => ['nullable', 'string', 'max:2000']
+            'configuration_id' => ['required', 'exists:configuraion_id'],
+            'accessory_ids' => ['required', 'array'],
+            'accessory_ids.*' => ['sometimes','exists:accessories,id'],
         ];
     }
 }

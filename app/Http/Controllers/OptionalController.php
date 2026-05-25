@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOptionalRequest;
 use App\Models\Optional;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,7 @@ class OptionalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOptionalRequest $request)
     {
         try {
             $data = $request->validated();

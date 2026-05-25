@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->enum('type', ['tech', 'performance', 'touring', 'protection', 'comfort', 'style'])->nullable();
+            $table->enum('type', ['performance', 'touring', 'protection', 'comfort'])->nullable();
             $table->timestamps();
         });
     }
