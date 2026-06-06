@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreModelRequest;
+use App\Http\Resources\ModelResource;
 use App\Models\Modello;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class ModelController extends Controller
 
             return response()->json([
                 "success" => true,
-                "data" => $modelli
+                "data" => ModelResource::collection($modelli)
             ], 200);
 
         } catch(\Exception $e) {
@@ -63,7 +64,11 @@ class ModelController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $model = Modello::findOrFail($id);
+        return response()->json([
+                "success" => true,
+                "data" => new ModelResource($model)
+            ], 200);
     }
     
     /**

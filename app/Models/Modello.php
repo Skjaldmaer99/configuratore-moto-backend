@@ -13,7 +13,6 @@ class Modello extends Model
         'name',
         'category',
         'base_price',
-        'image',
         'description'
     ];
 
@@ -32,14 +31,14 @@ class Modello extends Model
 
     public function optionals()
     {
-        return $this->belongsToMany(Optional::class, 'optional_compatibilities',
+        return $this->belongsToMany(Optional::class, 'model_optional_compatibility',
             'model_id',
             'optional_id');
     }
 
     public function accessories()
     {
-        return $this->belongsToMany(Accessory::class ,'model_accessory_compatibilities',
+        return $this->belongsToMany(Accessory::class ,'model_accessory_compatibility',
             'model_id',
             'accessory_id');
     }

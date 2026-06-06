@@ -27,7 +27,8 @@ class OptionalConfigurationController extends Controller
 
             $configuration = Configuration::findOrFail($data['configuration_id']);
 
-            $configuration->optionals()->sync(['optional_ids']);
+            // $configuration->optionals()->sync(['optional_ids']);
+            $configuration->accessories()->sync($data['accessory_ids']);
 
             return response()->json([
                 "success" => true,

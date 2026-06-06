@@ -14,6 +14,13 @@ class ColorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'model_id' => $this->model_id,
+            'name' => $this->name,
+            'hex_code' => $this->hex_code,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
+            'extra_price' => $this->extra_price
+        ];
     }
 }

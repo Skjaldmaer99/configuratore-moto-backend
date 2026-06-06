@@ -18,25 +18,28 @@ Route::controller(AuthController::class)->group(function() {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
 });
-
+    
 Route::middleware(['auth:sanctum'])->group(function () {
-    // creati dall'admin
-    Route::apiResource('models', ModelController::class);
-    Route::apiResource('engine-variants', EngineVariantController::class);
-    Route::apiResource('optionals', OptionalController::class);
-    Route::apiResource('accessories', AccessoryController::class);
-    Route::apiResource('colors', ColorController::class);
-    // aggiungere optional incompatibilities
+        Route::get('user', [AuthController::class, 'user']);
+        // creati dall'admin
+        Route::post('models', [ModelController::class, 'store']);
+        Route::get('models/{id}', [ModelController::class, 'show']);
+        Route::apiResource('engine-variants', EngineVariantController::class);
+        Route::apiResource('optionals', OptionalController::class);
+        Route::apiResource('accessories', AccessoryController::class);
+        Route::apiResource('colors', ColorController::class);
+        // aggiungere optional incompatibilities
 
-    // per creare tutto quello di sopra in blocco, tranne accessories e optionals
-    Route::post('admin/models/full-create', [CatalogCreationController::class, 'store']);
+        // per creare tutto quello di sopra in blocco, tranne accessories e optionals
+        Route::post('/full-create', [CatalogCreationController::class, 'store']);
 
-    // creati dal customer
-    Route::apiResource('configurations', ConfigurationController::class);
-    Route::apiResource('configuration-optionals', OptionalConfigurationController::class);
-    Route::apiResource('configuration-accessories', AccessoryConfigurationController::class);
+        // creati dal customer
+        Route::apiResource('configurations', ConfigurationController::class);
+        Route::patch('configurations/{id}', [ConfigurationController::class, "update"]);
+        Route::apiResource('configuration-optionals', OptionalConfigurationController::class);
+        Route::apiResource('configuration-accessories', AccessoryConfigurationController::class);
 
-    // -> /configurations/{id}/color
-    // -> /configurations/{id}/engine
-    // -> /configurations/{id}/optionals
+        // -> /configurations/{id}/color
+        // -> /configurations/{id}/engine
+        // -> /configurations/{id}/optionals
 });

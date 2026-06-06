@@ -77,11 +77,19 @@ class AuthController extends Controller
     }
 
     public function user() {
-        $user = new UserResource(Auth::user());
-
-        return response()->json([
-            "success" => true,
-            "user" => $user
-        ]);
+        try {
+            $user = new UserResource(Auth::user());
+    
+            return response()->json([
+                "success" => true,
+                "user" => $user,
+                "message" => "User autenticato ritornato con successo"
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
 }

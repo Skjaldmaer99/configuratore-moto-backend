@@ -42,6 +42,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        // aggiunto io perchè non mi trova sanctum
+        /* 'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ], */
     ],
 
     /*
