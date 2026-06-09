@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreConfigurationRequest;
 use App\Http\Requests\UpdateConfigurationRequest;
+use App\Http\Resources\ConfigurationResource;
 use App\Models\Configuration;
 use App\Models\Modello;
 use Illuminate\Support\Facades\Auth;
@@ -23,24 +24,21 @@ class ConfigurationController extends Controller
         return Configuration::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function show(string $id)
+    {
+        $configuration = Configuration::findOrFail($id);
+        return response()->json([
+                "success" => true,
+                "data" => new ConfigurationResource($configuration)
+            ], 200);
+    }
+
     public function store(StoreConfigurationRequest $request)
     {
         try {
             $data = $request->validated();
     
             $model = Modello::findOrFail($data["model_id"]);
-    
-            /* $configuration = Configuration::create([
-                'user_id' => Auth::id(),
-                'model_id' => $request->model_id,
-                'status' => 'draft',
-                'current_step' => 1,
-                //  dopo ogni step ricalcolare tutto da zero Per evitare bug quando un optional viene rimosso, un colore cambia, un engine cambia, cambiano compatibilità
-                'total_price' => $model->base_price
-            ]); */
 
             $configuration = Configuration::create([
                 'user_id' => Auth::id(),
@@ -51,7 +49,7 @@ class ConfigurationController extends Controller
 
                 'status' => 'draft',
                 'current_step' => 1,
-                'total_price' => $data['total_price'],
+                'total_price' => $model->base_price
             ]);
 
             return response()->json([
@@ -67,7 +65,7 @@ class ConfigurationController extends Controller
             }
     }
 
-    public function update(UpdateConfigurationRequest $request, string $id)
+    /* public function update(UpdateConfigurationRequest $request, string $id)
     {
         try {
             $data = $request->validated();
@@ -79,6 +77,7 @@ class ConfigurationController extends Controller
                 'color_id' => $data['color_id'] ?? $configuration->color_id,
                 'engine_variant_id' => $data['engine_variant_id'] ?? $configuration->engine_variant_id,
                 'current_step' => $data['current_step'] ?? $configuration->current_step,
+                'total_price' => $data['total_price'] ?? $configuration->total_price,
                 'status' => $data['status'] ?? $configuration->status,
             ]);
 
@@ -104,7 +103,64 @@ class ConfigurationController extends Controller
                 "message" => $e->getMessage(),
             ], 500);
         }
+    } */
+
+    public function update(UpdateConfigurationRequest $request, string $id)
+{
+    $data = $request->validated();
+
+    $configuration = Configuration::findOrFail($id);
+
+    $configuration->update([
+        'color_id' => $data['color_id'] ?? $configuration->color_id,
+        'engine_variant_id' => $data['engine_variant_id'] ?? $configuration->engine_variant_id,
+        'current_step' => $data['current_step'] ?? $configuration->current_step,
+        'status' => $data['status'] ?? $configuration->status,
+    ]);
+
+    if (isset($data['optional_ids'])) {
+        $configuration->optionals()->sync($data['optional_ids']);
     }
+
+    if (isset($data['accessory_ids'])) {
+        $configuration->accessories()->sync($data['accessory_ids']);
+    }
+
+    $configuration->load([
+        'model',
+        'color',
+        'engine',
+        'optionals',
+        'accessories'
+    ]);
+
+    $totalPrice = $configuration->model->base_price;
+
+    if ($configuration->color) {
+        $totalPrice += $configuration->color->extra_price;
+    }
+
+    if ($configuration->engineVariant) {
+        $totalPrice += $configuration->engineVariant->extra_price;
+    }
+
+    $totalPrice += $configuration->optionals->sum('price');
+
+    $totalPrice += $configuration->accessories->sum('price');
+
+    $configuration->update([
+        'total_price' => $totalPrice
+    ]);
+
+    return response()->json([
+        "success" => true,
+        "message" => "Configuration aggiornata con successo",
+        "data" => $configuration->fresh([
+            'optionals',
+            'accessories'
+        ])
+    ]);
+}
 
         
     public function destroy(string $id)

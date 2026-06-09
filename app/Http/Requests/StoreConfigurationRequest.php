@@ -29,7 +29,7 @@ class StoreConfigurationRequest extends FormRequest
             'color_id' => ['nullable', 'integer', 'exists:colors,id'],
             'status' => ['required', 'string'],
             'current_step' => ['required', 'integer'],
-            'total_price' => ['required', 'numeric'],
+            'total_price' => ['nullable','numeric'],
         ];
     }
 }

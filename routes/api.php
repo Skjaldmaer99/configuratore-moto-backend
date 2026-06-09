@@ -10,6 +10,7 @@ use App\Http\Controllers\EngineVariantController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\OptionalConfigurationController;
 use App\Http\Controllers\OptionalController;
+use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('models', [ModelController::class, 'index']);
@@ -35,9 +36,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // creati dal customer
         Route::apiResource('configurations', ConfigurationController::class);
+        Route::get('configurations/{id}', [ConfigurationController::class, "show"]);
         Route::patch('configurations/{id}', [ConfigurationController::class, "update"]);
         Route::apiResource('configuration-optionals', OptionalConfigurationController::class);
         Route::apiResource('configuration-accessories', AccessoryConfigurationController::class);
+
+        Route::post('/configurations/{configuration}/quote',[QuoteController::class, 'generate']);
+        Route::get('/quotes/{quote}/download',[QuoteController::class, 'download']);
 
         // -> /configurations/{id}/color
         // -> /configurations/{id}/engine
