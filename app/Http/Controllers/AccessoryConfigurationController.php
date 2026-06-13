@@ -25,13 +25,8 @@ class AccessoryConfigurationController extends Controller
             $data = $request->validated();
             $configuration = Configuration::findOrFail($data['configuration_id']);
 
-            // $configuration->accessories()->sync([$data['accessory_ids']]);
             $configuration->accessories()->sync($data['accessory_ids']);
 
-            /* $configuration = ConfigurationAccessory::create([
-                'configuration_id' => $data['configuration_id'],
-                'accessory_id' => $data['accessory_id']
-            ]); */
             return response()->json([
                 "success" => true,
                 "message" => "Accessory Configuration aggiunto alla pivot",

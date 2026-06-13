@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('configuration_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->decimal('final_price', 10, 2);
+            $table->decimal('final_price', 10, 2)->nullable();
             $table->string('pdf_path')->nullable();
             $table->timestamps();
         });

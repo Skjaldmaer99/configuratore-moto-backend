@@ -7,11 +7,6 @@ use App\Services\CatalogCreationService;
 
 class CatalogCreationController extends Controller
 {
-
-/* public function index() {
-    return
-} */
-
     /**
      * Store a newly created resource in storage.
      */

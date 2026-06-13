@@ -19,14 +19,11 @@ class QuoteController extends Controller
                 'accessories'
             ]);
 
-            $pdf = Pdf::loadView(
-                'pdf.quote', // view
-                [
+            $pdf = Pdf::loadView('pdf.quote', [ // per mostrare la view Blade
                     'configuration' => $configuration // dati
-                ]
-            );
+                ]);
 
-            $fileName = 'preventivo_' . $configuration->id . '.pdf';
+            $fileName = 'preventivo_' . $configuration->model->name . $configuration->engine->name . '.pdf';
 
             $path = 'quotes/' . $fileName;
 
@@ -36,22 +33,31 @@ class QuoteController extends Controller
             $preventivo = Quote::create([
                 'configuration_id' => $configuration->id,
                 'total_price' => $configuration->total_price,
-                'pdf_path' => $path
+                'pdf_path' => $path,
+                'final_price' => $configuration->total_price
             ]);
 
             return response()->json([
                 'success' => true,
                 'data' => $preventivo
-            ]);
+            ], 201);
         }catch(\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
     public function download(Quote $quote) {
-        return Storage::disk('public')->download($quote->pdf_path);
+        try {
+            return Storage::disk('public')->download($quote->pdf_path);
+
+        } catch(\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

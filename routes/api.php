@@ -10,7 +10,9 @@ use App\Http\Controllers\EngineVariantController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\OptionalConfigurationController;
 use App\Http\Controllers\OptionalController;
+use App\Http\Controllers\OptionalIncompatibilityController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('models', [ModelController::class, 'index']);
@@ -22,6 +24,7 @@ Route::controller(AuthController::class)->group(function() {
     
 Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('user', [AuthController::class, 'user']);
+        Route::apiResource('users', UserController::class);
         // creati dall'admin
         Route::post('models', [ModelController::class, 'store']);
         Route::get('models/{id}', [ModelController::class, 'show']);
@@ -29,7 +32,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('optionals', OptionalController::class);
         Route::apiResource('accessories', AccessoryController::class);
         Route::apiResource('colors', ColorController::class);
+
         // aggiungere optional incompatibilities
+        Route::apiResource('optional-incompatibilities', OptionalIncompatibilityController::class);
 
         // per creare tutto quello di sopra in blocco, tranne accessories e optionals
         Route::post('/full-create', [CatalogCreationController::class, 'store']);
@@ -43,8 +48,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::post('/configurations/{configuration}/quote',[QuoteController::class, 'generate']);
         Route::get('/quotes/{quote}/download',[QuoteController::class, 'download']);
-
-        // -> /configurations/{id}/color
-        // -> /configurations/{id}/engine
-        // -> /configurations/{id}/optionals
 });

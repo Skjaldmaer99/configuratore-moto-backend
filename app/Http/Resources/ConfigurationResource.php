@@ -29,6 +29,7 @@ class ConfigurationResource extends JsonResource
             "color" => new ColorResource($this->color),
             "optionals" => $this->optionals,
             "accessories" => $this->accessories,
+            "quote" => $this->quote,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
         ];

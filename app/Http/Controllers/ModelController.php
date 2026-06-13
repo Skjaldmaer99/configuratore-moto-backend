@@ -12,14 +12,21 @@ class ModelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try{
-            $modelli = Modello::all();
+            $query = Modello::query();
+
+            if($request->has('search') && !empty($request->input('search'))) {
+                $searchTerm = $request->input('search');
+                $query->where('name', 'iLIKE', $searchTerm . '%')->orWhere('brand', 'iLIKE', $searchTerm . '%');
+            }
+
+            $modelli = $query->paginate(12);
 
             return response()->json([
                 "success" => true,
-                "data" => ModelResource::collection($modelli)
+                "data" => ModelResource::collection($modelli) //->items()
             ], 200);
 
         } catch(\Exception $e) {

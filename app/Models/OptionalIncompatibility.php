@@ -12,4 +12,12 @@ class OptionalIncompatibility extends Model
         'optional_1_id',
         'optional_2_id'
     ];
+
+    public function optional1() {
+        return $this->belongsTo(Optional::class, 'optional_1_id');
+    }
+
+    public function optional2() {
+        return $this->belongsTo(Optional::class, 'optional_2_id');
+    }
 }
