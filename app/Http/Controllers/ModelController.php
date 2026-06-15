@@ -22,7 +22,8 @@ class ModelController extends Controller
                 $query->where('name', 'iLIKE', $searchTerm . '%')->orWhere('brand', 'iLIKE', $searchTerm . '%');
             }
 
-            $modelli = $query->paginate(12);
+            $modelli = $query->get();
+            //$modelli = $query->paginate(12);
 
             return response()->json([
                 "success" => true,

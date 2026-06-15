@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "role" => $this->role,
             "configurations" => ConfigurationResource::collection($this->configurations),
+            "email_verified_at" => $this->email_verified_at,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
         ];

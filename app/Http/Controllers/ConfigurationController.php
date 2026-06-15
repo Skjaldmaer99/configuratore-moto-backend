@@ -44,14 +44,14 @@ class ConfigurationController extends Controller
                 'engine_variant_id' => null,
 
                 'status' => 'draft',
-                'current_step' => 1,
+                'current_step' => $data['current_step'],
                 'total_price' => $model->base_price
             ]);
 
             return response()->json([
                 "success" => true,
                 "message" => "Configuration creata con successo",
-                "data" => $configuration
+                "data" => new ConfigurationResource($configuration)
             ], 201);
         } catch(\Exception $e) {
             return response()->json([
@@ -149,7 +149,9 @@ class ConfigurationController extends Controller
         
     public function destroy(string $id)
     {
-        //
+        $configuration = Configuration::findOrFail($id);
+
+        $configuration->delete();
     }
 }
 
