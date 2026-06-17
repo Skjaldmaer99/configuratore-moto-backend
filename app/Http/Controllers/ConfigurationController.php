@@ -124,8 +124,8 @@ class ConfigurationController extends Controller
             $totalPrice += $configuration->color->extra_price;
         }
 
-        if ($configuration->engineVariant) {
-            $totalPrice += $configuration->engineVariant->extra_price;
+        if ($configuration->engine) {
+            $totalPrice += $configuration->engine->extra_price;
         }
 
         $totalPrice += $configuration->optionals->sum('price');
