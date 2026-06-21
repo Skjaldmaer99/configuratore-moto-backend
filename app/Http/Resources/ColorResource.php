@@ -19,7 +19,7 @@ class ColorResource extends JsonResource
             'model_id' => $this->model_id,
             'name' => $this->name,
             'hex_code' => $this->hex_code,
-            'image' => $this->image ? asset('storage/' . $this->image) : null,
+            'image' => $this->image ? asset(filter_var($this->image, FILTER_VALIDATE_URL) ? $this->image : asset('storage/' . $this->image)) : null,
             'extra_price' => $this->extra_price
         ];
     }
